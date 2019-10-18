@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Clientes2;
+use App\Cursos;
 use Illuminate\Http\Request;
 
 class Clientes2Controller extends Controller
@@ -50,6 +51,15 @@ class Clientes2Controller extends Controller
             ],
             'clientes2' => $clientes2
         ];
+    }
+
+    public function buscarCursos(Request $request){
+
+        if (!$request->ajax()) return redirect('/');
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+        $cursos=Cursos::where($criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'DESC')->get();
+        return $cursos;
     }
 
     public function selectCategoria(Request $request){

@@ -76,4 +76,4 @@ Route::get('/clientes2/index', 'Clientes2Controller@index')->name('clientes2.ind
 Route::post('/ingreso/registrar', 'IngresoController@store');
 
 
-Route::get('/clientes/buscar', 'Clientes2Controller@buscar')->name('clientes2.buscar');
+Route::get('/listar/cursos', 'Clientes2Controller@buscarCursos')->name('clientes2.buscar_cursos');

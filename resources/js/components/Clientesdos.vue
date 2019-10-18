@@ -103,88 +103,27 @@
                     <template v-else-if="listado==0">
                     <div class="card-body">
                         <div class="form-group row border">
-                            <div class="col-md-9">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="">Proveedor(*)</label>
-                                    <v-select
-                                        :on-search="selectProveedor"
-                                        label="nombre"
-                                        :options="arrayProveedor"
-                                        placeholder="Buscar Proveedores..."
-                                        :onChange="getDatosProveedor"
-                                    >
+                                    <label for="">Nombre(*)</label>
+                                    <input type="text" class="form-control" v-model="nombre_curso">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="">Descripción(*)</label>
+                                <input type="text" class="form-control" v-model="descripcion_curso">
+                            </div>
 
-                                    </v-select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="">Impuesto(*)</label>
-                                <input type="text" class="form-control" v-model="impuesto">
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Tipo Comprobante(*)</label>
-                                    <select class="form-control" v-model="tipo_comprobante">
-                                        <option value="0">Seleccione</option>
-                                        <option value="BOLETA">Boleta</option>
-                                        <option value="FACTURA">Factura</option>
-                                        <option value="TICKET">Ticket</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Serie Comprobante</label>
-                                    <input type="text" class="form-control" v-model="serie_comprobante" placeholder="000x">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Número Comprobante(*)</label>
-                                    <input type="text" class="form-control" v-model="num_comprobante" placeholder="000xx">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div v-show="errorIngreso" class="form-group row div-error">
-                                    <div class="text-center text-error">
-                                        <div v-for="error in errorMostrarMsjIngreso" :key="error" v-text="error">
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
 
 
                         <!-- Empieza la de articulo -->
                         <div class="form-group row border">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Artículo <span style="color:red;" v-show="idarticulo==0">(*Seleccione)</span></label>
-                                    <div class="form-inline">
-                                        <input type="text" class="form-control" v-model="codigo" @keyup.enter="buscarArticulo()" placeholder="Ingrese artículo">
-                                        <button @click="abrirModal()" class="btn btn-primary">...</button>
-                                         <!-- Boton ingresar modal -->
-                                        <input type="text" readonly class="form-control" v-model="articulo">
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label>Precio <span style="color:red;" v-show="precio==0">(*Ingrese)</span></label>
-                                    <input type="number" value="0" step="any" class="form-control" v-model="precio">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>Cantidad <span style="color:red;" v-show="cantidad==0">(*Ingrese)</span></label>
-                                    <input type="number" value="0" class="form-control" v-model="cantidad">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <button @click="agregarDetalle()" class="btn btn-success form-control btnagregar"><i class="icon-plus"></i></button>
+                                    <button @click="abrirModal()" class="btn btn-success form-control btnagregar">Agregar Curso<i class="icon-plus"></i></button>
                                     <!-- Agrega la funcion para agregar detalle -->
                                 </div>
                             </div>
@@ -201,13 +140,12 @@
                                     <thead>
                                         <tr>
                                             <th>Opciones</th>
-                                            <th>Artículo</th>
-                                            <th>Precio</th>
-                                            <th>Cantidad</th>
-                                            <th>Subtotal</th>
+                                            <th>Cursos</th>
+                                            <th>Descripción</th>
+
                                         </tr>
                                     </thead>
-                                    <tbody v-if="arrayDetalle.length">
+                                    <tbody v-if="arrayCursos.length">
                                         <tr v-for="(detalle,index) in arrayDetalle" :key="detalle.id">
                                             <td>
                                                 <button @click="eliminarDetalle(index)" type="button" class="btn btn-danger btn-sm">
@@ -385,10 +323,9 @@
                                         <select class="form-control col-md-3" v-model="criterioA">
                                         <option value="nombre">Nombre</option>
                                         <option value="descripcion">Descripción</option>
-                                        <option value="codigo">Código</option>
                                         </select>
-                                        <input type="text" v-model="buscarA" @keyup.enter="listarArticulo(buscarA,criterioA)" class="form-control" placeholder="Texto a buscar">
-                                        <button type="submit" @click="listarArticulo(buscarA,criterioA)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                        <input type="text" v-model="buscarA" @keyup.enter="listarCursos(buscarA,criterioA)" class="form-control" placeholder="Texto a buscar">
+                                        <button type="submit" @click="listarCursos(buscarA,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                     </div>
                                 </div>
                             </div>
@@ -397,27 +334,23 @@
                                     <thead>
                                         <tr>
                                             <th>Opciones</th>
-                                            <th>Código</th>
                                             <th>Nombre</th>
-                                            <th>Categoría</th>
-                                            <th>Precio Venta</th>
-                                            <th>Stock</th>
-                                            <th>Estado</th>
+                                            <th>Descripción</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="articulo in arrayArticulo" :key="articulo.id">
+                                        <tr v-for="curso in arrayCursos" :key="curso.id">
                                             <td>
-                                                <button type="button" @click="agregarDetalleModal(articulo)" class="btn btn-success btn-sm">
+                                                <button type="button" @click="agregarDetalleModal(curso)" class="btn btn-success btn-sm">
                                                 <i class="icon-check"></i>
                                                 </button>
                                             </td>
-                                            <td v-text="articulo.codigo"></td>
-                                            <td v-text="articulo.nombre"></td>
-                                            <td v-text="articulo.nombre_categoria"></td>
-                                            <td v-text="articulo.precio_venta"></td>
-                                            <td v-text="articulo.stock"></td>
-                                            <td>
+
+                                            <td v-text="curso.nombre"></td>
+                                            <td v-text="curso.descripcion"></td>
+
+                                            <!-- <td>
                                                 <div v-if="articulo.condicion">
                                                     <span class="badge badge-success">Activo</span>
                                                 </div>
@@ -425,7 +358,7 @@
                                                     <span class="badge badge-danger">Desactivado</span>
                                                 </div>
 
-                                            </td>
+                                            </td> -->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -459,6 +392,8 @@
                 ap : '',
                 am : '',
                 total : '',
+                nombre_curso :'',
+                descripcion_curso :'',
                 tipo_comprobante : 'BOLETA',
                 serie_comprobante : '',
                 num_comprobante : '',
@@ -469,7 +404,7 @@
                 arrayCliente : [],
                 arrayClienteCurso : [],
                 arrayProveedor: [],
-                arrayDetalle : [],
+                arrayCursos : [],
                 listado:1,  //se muestra el listado con esta
                 modal : 0,
                 tituloModal : '',
@@ -545,7 +480,6 @@
                     var respuesta= response.data;
                     me.arrayCliente = respuesta.clientes2.data;
                     me.pagination= respuesta.pagination;
-                     console.log(me.arrayCliente);
 
                 })
                 .catch(function (error) {
@@ -619,67 +553,38 @@
         //         let me = this;
         //         me.arrayDetalle.splice(index, 1);
         //     },
-        //     agregarDetalle(){  //funcion para el + chingona
-        //         let me=this;
-        //         if(me.idarticulo==0 || me.cantidad==0 || me.precio==0){
-        //         }
-        //         else{
-        //             if(me.encuentra(me.idarticulo)){
-        //                 swal({
-        //                     type: 'error',
-        //                     title: 'Error...',
-        //                     text: 'Ese artículo ya se encuentra agregado!',
-        //                     })
-        //             }
-        //             else{
-        //                 // Estos son los v-modal y dinamicos
-        //                me.arrayDetalle.push({
-        //                     idarticulo: me.idarticulo,
-        //                     articulo: me.articulo,
-        //                     cantidad: me.cantidad,
-        //                     precio: me.precio
-        //                 });
-        //                 me.codigo="";
-        //                 me.idarticulo=0;
-        //                 me.articulo="";
-        //                 me.cantidad=0;
-        //                 me.precio=0;
-        //             }
-
-        //         }
 
 
-
-        //     },
-        //     agregarDetalleModal(data =[]){
-        //         let me=this;
-        //         if(me.encuentra(data['id'])){
-        //                 swal({
-        //                     type: 'error',
-        //                     title: 'Error...',
-        //                     text: 'Ese artículo ya se encuentra agregado!',
-        //                     })
-        //             }
-        //             else{
-        //                me.arrayDetalle.push({
-        //                     idarticulo: data['id'],
-        //                     articulo: data['nombre'],
-        //                     cantidad: 1,
-        //                     precio: 1
-        //                 });
-        //             }
-        //     },
-        //     listarArticulo (buscar,criterio){
-        //         let me=this;
-        //         var url= this.ruta + '/articulo/listarArticulo?buscar='+ buscar + '&criterio='+ criterio;
-        //         axios.get(url).then(function (response) {
-        //             var respuesta= response.data;
-        //             me.arrayArticulo = respuesta.articulos.data;
-        //         })
-        //         .catch(function (error) {
-        //             console.log(error);
-        //         });
-        //     },
+            // agregarCurso(data =[]){
+            //     let me=this;
+            //     if(me.encuentra(data['id'])){
+            //             swal({
+            //                 type: 'error',
+            //                 title: 'Error...',
+            //                 text: 'Ese artículo ya se encuentra agregado!',
+            //                 })
+            //         }
+            //         else{
+            //            me.arrayDetalle.push({
+            //                 idarticulo: data['id'],
+            //                 articulo: data['nombre'],
+            //                 cantidad: 1,
+            //                 precio: 1
+            //             });
+            //         }
+            // },
+            listarCursos (buscar,criterio){
+                let me=this;
+                var url='http://localhost/laravel_vue_modal/public/listar/cursos?buscar= &buscar='+ buscar + '&criterio='+ criterio;
+                //   var url='http://localhost/laravel_vue_modal/public/clientes2/index?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data;
+                    me.arrayCursos = respuesta.cursos.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
         //     registrarIngreso(){
         //         if (this.validarIngreso()){
         //             return;
@@ -784,15 +689,15 @@
         //             console.log(error);
         //         });
         //     },
-        //     cerrarModal(){
-        //         this.modal=0;
-        //         this.tituloModal='';
-        //     },
-        //     abrirModal(){
-        //         this.arrayArticulo=[];
-        //         this.modal = 1;
-        //         this.tituloModal = 'Seleccione uno o varios artículos';
-        //     },
+            cerrarModal(){
+                this.modal=0;
+                this.tituloModal='';
+            },
+            abrirModal(){
+                this.listarCursos();
+                this.modal = 1;
+                this.tituloModal = 'Seleccione uno o varios Cursos';
+            },
         //     desactivarIngreso(id){
         //        swal({
         //         title: 'Esta seguro de anular este ingreso?',
@@ -835,6 +740,7 @@
         },
         mounted() {
             this.listarCliente(1,this.buscar,this.criterio);
+            this.listarCursos(1,this.buscar,this.criterio);
         }
     }
 </script>
