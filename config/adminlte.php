@@ -45,7 +45,7 @@ return [
     |
     */
 
-    'skin' => 'green-light',
+    'skin' => 'yellow',
 
     /*
     |--------------------------------------------------------------------------
@@ -134,6 +134,43 @@ return [
                     'permission'  => 'create-user',
                     'icon' => 'plus-circle'
                 ],
+            ],
+        ],
+
+         //nueva sección Modales
+         [
+            'text' => 'Modales Vue',
+            'url'  => 'admin/user',
+            'icon' => 'users',
+            'permission'  => 'read-user',
+            'submenu' => [
+                [
+                    'text' => 'Clientes basico',
+                    'url'  => '/clientes',
+                    'permission'  => 'read-user',
+                    'icon' => 'list'
+                ],
+                [
+                    'text' => 'Dinamico uno',
+                    'url'  => '/dinamicos',
+                    'permission'  => 'create-user',
+                    'icon' => 'plus-circle'
+                ],
+                [
+                    'text' => 'Dinamico por bloque',
+                    'url'  => '/dinamicos/dos',
+                    'permission'  => 'create-user',
+                    'icon' => 'plus-circle'
+                ],
+                [
+                    'text' => 'Clientes2 Detalle',
+                    'url'  => '/clientes2',
+                    'permission'  => 'create-user',
+                    'icon' => 'plus-circle'
+                ],
+
+
+
             ],
         ],
 
@@ -298,29 +335,9 @@ return [
                     'icon' => 'plus-circle'
                 ],
             ],
-        ],
+        ]
 
-        //nueva sección
-        [
-            'text' => 'Modales Vue',
-            'url'  => 'admin/user',
-            'icon' => 'users',
-            'permission'  => 'read-user',
-            'submenu' => [
-                [
-                    'text' => 'Clientes basico',
-                    'url'  => '/clientes',
-                    'permission'  => 'read-user',
-                    'icon' => 'list'
-                ],
-                [
-                    'text' => 'Crear',
-                    'url'  => 'admin/user/create',
-                    'permission'  => 'create-user',
-                    'icon' => 'plus-circle'
-                ],
-            ],
-        ],
+
     ],
 
     /*

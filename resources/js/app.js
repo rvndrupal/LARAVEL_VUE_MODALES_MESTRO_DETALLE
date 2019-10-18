@@ -13,7 +13,7 @@ window.Vue = require('vue');
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
  * components and automatically register them with their "basename".
- *
+ *l
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
@@ -22,6 +22,12 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('clientes', require('./components/Clientes.vue').default);
+Vue.component('dinamicos', require('./components/Dinamicos.vue').default);
+Vue.component('dinamicoshow', require('./components/Dinamicoshow.vue').default);
+Vue.component('dinamicosdos', require('./components/Dinamicosdos.vue').default);
+Vue.component('clientesdos', require('./components/Clientesdos.vue').default);
+
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

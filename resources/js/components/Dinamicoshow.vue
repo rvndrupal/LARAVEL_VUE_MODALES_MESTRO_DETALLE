@@ -8,8 +8,8 @@
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Clientes
-                        <button type="button" @click="abrirModal('clientes','registrar')" class="btn btn-secondary">
+                        <i class="fa fa-align-justify"></i> Dinamicos
+                        <button type="button" @click="abrirModal('dinamicos','registrar')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
                         </button>
                         <button type="button" @click="cargarPdf()" class="btn btn-info">
@@ -24,8 +24,8 @@
                                       <option value="nom">Nombre</option>
                                       <option value="ap">Ap</option>
                                     </select>
-                                    <input type="text" v-model="buscar" @keyup.enter="listarClientes(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
-                                    <button type="submit" @click="listarClientes(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" v-model="buscar" @keyup.enter="listarDinamicos(1,buscar,criterio)" class="form-control" placeholder="Texto a buscar">
+                                    <button type="submit" @click="listarDinamicos(1,buscar,criterio)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -33,18 +33,18 @@
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
+                                    <th>Id</th>
                                     <th>Nombre</th>
                                     <th>Ap</th>
-                                    <th>Condición</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="cliente in arrayClientes" :key="cliente.id">
+                                <tr v-for="dinamico in arrayDinamicos" :key="dinamico.id">
                                     <td>
-                                        <button type="button" @click="abrirModal('clientes','actualizar',cliente)" class="btn btn-warning btn-sm">
+                                        <button type="button" @click="abrirModal('dinamicos','actualizar',dinamico)" class="btn btn-warning btn-sm">
                                           <i class="fa fa-pencil">Editar</i>
                                         </button> &nbsp;
-                                        <template v-if="cliente.condicion">
+                                        <!-- <template v-if="cliente.condicion">
                                             <button type="button" class="btn btn-danger btn-sm" @click="desactivarClientes(cliente.id)">
                                                 <i class="icon-trash">Desactivar</i>
                                             </button>
@@ -53,19 +53,20 @@
                                             <button type="button" class="btn btn-info btn-sm" @click="activarClientes(cliente.id)">
                                                 <i class="icon-check">Activar</i>
                                             </button>
-                                        </template>
+                                        </template> -->
                                     </td>
-                                    <td v-text="cliente.nom"></td>
-                                    <td v-text="cliente.ap"></td>
-                                    <td>
-                                        <div v-if="cliente.condicion">
+                                    <td v-text="dinamico.id"></td>
+                                    <td v-text="dinamico.nom"></td>
+                                    <td v-text="dinamico.ap"></td>
+                                    <!-- <td>
+                                        <div v-if="dinamico.condicion">
                                             <span class="badge badge-success">Activo</span>
                                         </div>
                                         <div v-else>
                                             <span class="badge badge-danger">Desactivado</span>
                                         </div>
 
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -112,15 +113,6 @@
 
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Foto(*)</label>
-                                    <div class="col-md-9">
-                                        <input type="file" @change="subirImagen" class="form-control" placeholder="">
-                                        <img :src="foto" class="img-responsive" width="100px" height="100px">
-
-                                    </div>
-                                </div>
-
 
 
                                 <div v-show="errorCliente" class="form-group row div-error">
@@ -157,11 +149,10 @@
         props : ['ruta'],
         data (){
             return {
-                cliente_id: 0,
+                dinamico_id: 0,
                 nom : '',
                 ap : '',
-                foto: '',
-                arrayClientes : [],
+                arrayDinamicos : [],
                 modal : 0,
                 tituloModal : '',
                 tipoAccion : 0,
@@ -210,12 +201,12 @@
             }
         },
         methods : {
-            listarClientes (page,buscar,criterio){
+            listarDinamicos (page,buscar,criterio){
                 let me=this;
-                var url='http://localhost/laravel_vue_modal/public/clientes/index?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                var url='http://localhost/laravel_vue_modal/public/dinamicos/index?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
-                    me.arrayClientes = respuesta.clientes.data;
+                    me.arrayDinamicos = respuesta.dinamicos.data;
                     me.pagination= respuesta.pagination;
                 })
                 .catch(function (error) {
@@ -230,33 +221,24 @@
                 //Actualiza la página actual
                 me.pagination.current_page = page;
                 //Envia la petición para visualizar la data de esa página
-                me.listarClientes(page,buscar,criterio);
+                me.listarDinamicos(page,buscar,criterio);
             },
             registrarCliente(){
                 if (this.validarCliente()){
                     return;
                 }
+
                 let me = this;
+
                 axios.post('http://localhost/laravel_vue_modal/public/clientes/registrar',{
                     'nom': this.nom,
-                    'ap': this.ap,
-                    'foto': this.foto
+                    'ap': this.ap
                 }).then(function (response) {
                     me.cerrarModal();
                     me.listarClientes(1,'','nom');
                 }).catch(function (error) {
                     console.log(error);
                 });
-            },
-             subirImagen(e){
-                let me=this;
-                let file = e.target.files[0];
-                let reader = new FileReader();
-                reader.onloadend = (file) => {
-                    //console.log('RESULT', reader.result)
-                    me.foto = reader.result;
-                }
-                reader.readAsDataURL(file);
             },
             actualizarCliente(){
                if (this.validarCliente()){
@@ -265,14 +247,13 @@
 
                 let me = this;
 
-                axios.post('http://localhost/laravel_vue_modal/public/clientes/actualizar',{
+                axios.post('http://localhost/laravel_vue_modal/public/dinamicos/actualizar',{
                     'nom': this.nom,
                     'ap': this.ap,
-                    'am': this.am,
-                    'id': this.cliente_id
+                    'id': this.dinamico_id
                 }).then(function (response) {
                     me.cerrarModal();
-                    me.listarClientes(1,'','nom');
+                    me.listarDinamicos(1,'','nom');
                 }).catch(function (error) {
                     console.log(error);
                 });
@@ -371,20 +352,20 @@
                 this.modal=0;
                 this.tituloModal='';
                 this.nombre='';
-                this.descripcion='';
+                this.ap='';
             },
             abrirModal(modelo, accion, data = []){
                 switch(modelo){
-                    case "clientes":
+                    case "dinamicos":
                     {
                         switch(accion){
                             case 'registrar':
                             {
                                 this.modal = 1;
-                                this.tituloModal = 'Registrar Categoría';
+                                this.tituloModal = 'Registrar Dinamicos';
                                 this.nom= '';
                                 this.ap = '';
-                                this.foto= '';
+                                this.am= '';
                                 this.tipoAccion = 1;
                                 break;
                             }
@@ -392,12 +373,11 @@
                             {
                                 //console.log(data);
                                 this.modal=1;
-                                this.tituloModal='Actualizar categoría';
+                                this.tituloModal='Actualizar Dinamicos';
                                 this.tipoAccion=2;
-                                this.cliente_id=data['id'];
+                                this.dinamico_id=data['id'];
                                 this.nom = data['nom'];
                                 this.ap= data['ap'];
-                                this.foto= data['foto'];
                                 break;
                             }
                         }
@@ -406,7 +386,7 @@
             }
         },
         mounted() {
-            this.listarClientes(1,this.buscar,this.criterio);
+            this.listarDinamicos(1,this.buscar,this.criterio);
         }
     }
 

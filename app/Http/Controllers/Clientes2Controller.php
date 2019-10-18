@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Clientes;
+use App\Clientes2;
 use Illuminate\Http\Request;
 
-class ClientesController extends Controller
+class Clientes2Controller extends Controller
 {
+
+    public function buscar()
+    {
+        $clientes2 = Clientes2::with('cursos')->orderBy('id', 'DESC')->get();
+
+        //dd($clientes2);
+    }
+
+
     public function home()
     {
         $title="Clientes";
-        return view('clientes.index',compact('title'));
+        return view('clientes2.index',compact('title'));
     }
    /**
      * Display a listing of the resource.
@@ -19,33 +28,33 @@ class ClientesController extends Controller
      */
     public function index(Request $request)
     {
-       if (!$request->ajax()) return redirect('/');
+        if (!$request->ajax()) return redirect('/');
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
 
         if ($buscar==''){
-            $clientes = Clientes::orderBy('id', 'DESC')->paginate(2);
+            $clientes2 = Clientes2::with('cursos')->orderBy('id', 'DESC')->paginate(4);
         }
         else{
-            $clientes = Clientes::where($criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'DESC')->paginate(4);
+            $clientes2 = Clientes2::with('cursos')->where($criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'DESC')->paginate(4);
         }
         return [
             'pagination' => [
-                'total'        => $clientes->total(),
-                'current_page' => $clientes->currentPage(),
-                'per_page'     => $clientes->perPage(),
-                'last_page'    => $clientes->lastPage(),
-                'from'         => $clientes->firstItem(),
-                'to'           => $clientes->lastItem(),
+                'total'        => $clientes2->total(),
+                'current_page' => $clientes2->currentPage(),
+                'per_page'     => $clientes2->perPage(),
+                'last_page'    => $clientes2->lastPage(),
+                'from'         => $clientes2->firstItem(),
+                'to'           => $clientes2->lastItem(),
             ],
-            'clientes' => $clientes
+            'clientes2' => $clientes2
         ];
     }
 
     public function selectCategoria(Request $request){
         if (!$request->ajax()) return redirect('/');
-        $clientes = Clientes::where('condicion','=','1')
+        $clientes = Clientes2::where('condicion','=','1')
         ->select('id','nombre')->orderBy('nombre', 'asc')->get();
         return ['categorias' => $clientes];
     }
@@ -134,5 +143,4 @@ class ClientesController extends Controller
         $categoria->condicion = '1';
         $categoria->save();
     }
-
 }

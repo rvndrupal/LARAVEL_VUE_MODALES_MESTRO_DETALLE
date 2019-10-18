@@ -12,8 +12,8 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        Storage::deleteDirectory('products');
-        Storage::makeDirectory('products');
-        factory(\App\Product::class, 20)->create();
+        // Storage::deleteDirectory('products');
+        // Storage::makeDirectory('products');
+        // factory(\App\Product::class, 20)->create();
     }
 }

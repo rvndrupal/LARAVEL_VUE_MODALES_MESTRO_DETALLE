@@ -57,3 +57,23 @@ Route::post('/clientes/registrar', 'ClientesController@store');
 Route::post('/clientes/actualizar', 'ClientesController@update');
 Route::post('/clientes/desactivar', 'ClientesController@desactivar');
 Route::post('/clientes/activar', 'ClientesController@activar');
+
+
+//dinamicos con vue
+Route::get('/dinamicos', 'DinamicosController@create')->name('dinamicos.create');
+Route::post('/dinamicos/store', 'DinamicosController@store')->name('dinamicos.store');
+Route::get('/dinamicos/index', 'DinamicosController@index');
+Route::post('/dinamicos/actualizar', 'DinamicosController@update');
+
+//dinamicos dos por bloque
+Route::get('/dinamicos/dos', 'DinamicosdosController@create')->name('dinamicosdos.create');
+Route::post('/dinamicosdos/store', 'DinamicosdosController@store')->name('dinamicosdos.store');
+
+
+//modal con detalle
+Route::get('/clientes2', 'Clientes2Controller@home')->name('clientes2.home');
+Route::get('/clientes2/index', 'Clientes2Controller@index')->name('clientes2.index');
+Route::post('/ingreso/registrar', 'IngresoController@store');
+
+
+Route::get('/clientes/buscar', 'Clientes2Controller@buscar')->name('clientes2.buscar');
